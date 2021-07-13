@@ -19,7 +19,7 @@ namespace Microsoft.AspNetCore.Components.Web
         /// Marks the specified component type as allowed for instantiation from JavaScript.
         /// </summary>
         /// <typeparam name="TComponent"></typeparam>
-        [DynamicDependency(nameof(DynamicRootComponentInterop.AddRootComponent), typeof(DynamicRootComponentInterop))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(DynamicRootComponentInterop))]
         public void Register<[DynamicallyAccessedMembers(Component)] TComponent>(string name) where TComponent : IComponent
         {
             AllowedComponents.Add((typeof(TComponent), name));
