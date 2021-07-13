@@ -130,6 +130,17 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Rendering
             }
         }
 
+        public ValueTask InitializeDynamicRootComponentSupportAsync(DynamicRootComponentConfiguration configuration)
+        {
+            var interop = new DynamicRootComponentInterop(
+                configuration,
+                DefaultWebAssemblyJSRuntime.Instance,
+                AddRootComponent,
+                RenderRootComponentAsync,
+                RemoveRootComponent);
+            return interop.InitializeAsync();
+        }
+
         /// <inheritdoc />
         protected override void HandleException(Exception exception)
         {

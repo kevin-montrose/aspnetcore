@@ -66,6 +66,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             RootComponents = new RootComponentMappingCollection();
             Services = new ServiceCollection();
             Logging = new LoggingBuilder(Services);
+            DynamicRootComponents = new DynamicRootComponentConfiguration();
 
             // Retrieve required attributes from JSRuntimeInvoker
             InitializeNavigationManager(jsRuntime);
@@ -186,6 +187,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         /// Gets the logging builder for configuring logging services.
         /// </summary>
         public ILoggingBuilder Logging { get; }
+
+        /// <summary>
+        /// Gets an object that holds options for allowing JavaScript to add root components dynamically.
+        /// </summary>
+        public DynamicRootComponentConfiguration DynamicRootComponents { get; }
 
         /// <summary>
         /// Registers a <see cref="IServiceProviderFactory{TBuilder}" /> instance to be used to create the <see cref="IServiceProvider" />.
