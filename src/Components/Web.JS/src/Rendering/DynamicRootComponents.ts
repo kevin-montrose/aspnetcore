@@ -3,20 +3,30 @@ let manager: DotNet.DotNetObject | undefined;
 
 // These are the public APIs at Blazor.rootComponents.*
 export const RootComponentsFunctions = {
-    async add(toElement: Element, componentIdentifier: string, parameters: any): Promise<DynamicRootComponent> {
+    async add(toElement: Element, componentIdentifier: FunctionStringCallback): Promise<DynamicRootComponent> {
         // TODO: Figure out how to describe the insertion location
         const componentId = await getRequiredManager().invokeMethodAsync<number>(
-            'AddRootComponent', componentIdentifier, '#test', parameters);
+            'AddRootComponent', componentIdentifier, '#test');
         return new DynamicRootComponent(componentId);
     }
 };
 
 class DynamicRootComponent {
-    private _componentId: number;
+    private _componentId: number | null;
 
     constructor(componentId: number) {
         this._componentId = componentId;
-        console.log(componentId);
+    }
+
+    setParameters(parameters: any) {
+        return getRequiredManager().invokeMethodAsync('RenderRootComponentAsync', this._componentId, parameters);
+    }
+
+    async dispose() {
+        if (this._componentId !== null) {
+            await getRequiredManager().invokeMethodAsync('RemoveRootComponent', this._componentId);
+            this._componentId = null; // Ensure it can't be used again
+        }
     }
 }
 

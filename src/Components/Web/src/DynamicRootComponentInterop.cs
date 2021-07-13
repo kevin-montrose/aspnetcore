@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.ComponentModel;
+using System.Text.Json;
 using Microsoft.JSInterop;
 
 namespace Microsoft.AspNetCore.Components.Web
@@ -82,7 +83,7 @@ namespace Microsoft.AspNetCore.Components.Web
         /// For framework use only.
         /// </summary>
         [JSInvokable]
-        public Task RenderRootComponentAsync(int componentId)
+        public Task RenderRootComponentAsync(int componentId, JsonElement parameters)
             // TODO: Some way to supply parameters from JS
             => _renderRootComponentAsync(componentId, ParameterView.Empty);
 

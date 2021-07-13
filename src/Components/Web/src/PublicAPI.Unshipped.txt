@@ -29,7 +29,7 @@ Microsoft.AspNetCore.Components.Web.DynamicRootComponentInterop.Dispose() -> voi
 Microsoft.AspNetCore.Components.Web.DynamicRootComponentInterop.DynamicRootComponentInterop(Microsoft.AspNetCore.Components.Web.DynamicRootComponentConfiguration! configurationBuilder, Microsoft.JSInterop.IJSRuntime! jsRuntime, System.Func<System.Type!, string!, int>! addRootComponent, System.Func<int, Microsoft.AspNetCore.Components.ParameterView, System.Threading.Tasks.Task!>! renderRootComponentAsync, System.Action<int>! removeRootComponent) -> void
 Microsoft.AspNetCore.Components.Web.DynamicRootComponentInterop.InitializeAsync() -> System.Threading.Tasks.ValueTask
 Microsoft.AspNetCore.Components.Web.DynamicRootComponentInterop.RemoveRootComponent(int componentId) -> void
-Microsoft.AspNetCore.Components.Web.DynamicRootComponentInterop.RenderRootComponentAsync(int componentId) -> System.Threading.Tasks.Task!
+Microsoft.AspNetCore.Components.Web.DynamicRootComponentInterop.RenderRootComponentAsync(int componentId, System.Text.Json.JsonElement parameters) -> System.Threading.Tasks.Task!
 Microsoft.AspNetCore.Components.Web.ErrorBoundary
 Microsoft.AspNetCore.Components.Web.ErrorBoundary.ErrorBoundary() -> void
 Microsoft.AspNetCore.Components.Web.IErrorBoundaryLogger
