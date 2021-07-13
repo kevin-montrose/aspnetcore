@@ -1,12 +1,26 @@
 import { DotNet } from '@microsoft/dotnet-js-interop';
+
+const blazorDynamicRootComponentAttributeName = 'bl-dynamic-root';
+
 let manager: DotNet.DotNetObject | undefined;
+let nextDynamicRootComponentSelector = 0;
 
 // These are the public APIs at Blazor.rootComponents.*
 export const RootComponentsFunctions = {
     async add(toElement: Element, componentIdentifier: FunctionStringCallback): Promise<DynamicRootComponent> {
-        // TODO: Figure out how to describe the insertion location
+        // Attaching a selector like below assumes the element is within the document. If we need to support
+        // rendering into nonattached elements, we can add that, but it's possible that other aspects of the
+        // JS-side code will make assumptions about rendering only happening into document-attached nodes.
+        // For now, limiting it to elements within the document.
+        if (!toElement.isConnected) {
+            throw new Error('The element is not connected to the DOM.');
+        }
+
+        const selectorValue = (++nextDynamicRootComponentSelector).toString();
+        toElement.setAttribute(blazorDynamicRootComponentAttributeName, selectorValue);
+        const selector = `[${blazorDynamicRootComponentAttributeName}='${selectorValue}']`;
         const componentId = await getRequiredManager().invokeMethodAsync<number>(
-            'AddRootComponent', componentIdentifier, '#test');
+            'AddRootComponent', componentIdentifier, selector);
         return new DynamicRootComponent(componentId);
     }
 };
