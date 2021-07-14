@@ -17,6 +17,7 @@ namespace Microsoft.AspNetCore.Components.Web
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class DynamicRootComponentInterop : IDisposable
     {
+        private const int MaxParameters = 100;
         private readonly DotNetObjectReference<DynamicRootComponentInterop> _selfReference;
         private readonly IJSRuntime _jsRuntime;
         private readonly Func<Type, string, int> _addRootComponent;
@@ -83,9 +84,38 @@ namespace Microsoft.AspNetCore.Components.Web
         /// For framework use only.
         /// </summary>
         [JSInvokable]
-        public Task RenderRootComponentAsync(int componentId, JsonElement parameters)
-            // TODO: Some way to supply parameters from JS
-            => _renderRootComponentAsync(componentId, ParameterView.Empty);
+        public Task RenderRootComponentAsync(int componentId, int parameterCount, JsonElement parameters)
+        {
+            // In case the client misreports the number of parameters, impose bounds so we know the amount
+            // of work done is limited to a fixed, low amount.
+            if (parameterCount < 0 || parameterCount > MaxParameters)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(parameterCount)} must be between 0 and {MaxParameters}.");
+            }
+
+            // TODO: Use the [Parameter] attributes on the component type to create a precached
+            // JsonElement->ParameterView parser that respects the declared parameter types, not
+            // the actual types in the JSON data.
+            var parameterViewBuilder = new ParameterViewBuilder(parameterCount);
+            foreach (var jsonElement in parameters.EnumerateObject())
+            {
+                switch (jsonElement.Value.ValueKind)
+                {
+                    case JsonValueKind.Number:
+                        parameterViewBuilder.Add(jsonElement.Name, jsonElement.Value.GetInt32());
+                        break;
+                    case JsonValueKind.String:
+                        parameterViewBuilder.Add(jsonElement.Name, jsonElement.Value.GetString());
+                        break;
+                    case JsonValueKind.True:
+                    case JsonValueKind.False:
+                        parameterViewBuilder.Add(jsonElement.Name, jsonElement.Value.GetBoolean());
+                        break;
+                }
+            }
+
+            return _renderRootComponentAsync(componentId, parameterViewBuilder.ToParameterView());
+        }
 
         /// <summary>
         /// For framework use only.

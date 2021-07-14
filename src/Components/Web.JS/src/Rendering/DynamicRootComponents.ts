@@ -32,8 +32,10 @@ class DynamicRootComponent {
         this._componentId = componentId;
     }
 
-    setParameters(parameters: any) {
-        return getRequiredManager().invokeMethodAsync('RenderRootComponentAsync', this._componentId, parameters);
+    setParameters(parameters: object | null | undefined) {
+        parameters = parameters || {};
+        const parameterCount = Object.keys(parameters).length;
+        return getRequiredManager().invokeMethodAsync('RenderRootComponentAsync', this._componentId, parameterCount, parameters);
     }
 
     async dispose() {
