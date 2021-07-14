@@ -266,6 +266,14 @@ namespace Microsoft.AspNetCore.Components.RenderTree
         }
 
         /// <summary>
+        /// Gets the type of the specified root component.
+        /// </summary>
+        /// <param name="componentId">The root component ID.</param>
+        /// <returns>The type of the component.</returns>
+        protected Type GetRootComponentType(int componentId)
+            => GetRequiredRootComponentState(componentId).Component.GetType();
+
+        /// <summary>
         /// Allows derived types to handle exceptions during rendering. Defaults to rethrowing the original exception.
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/>.</param>

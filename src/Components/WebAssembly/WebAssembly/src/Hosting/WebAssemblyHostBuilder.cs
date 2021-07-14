@@ -59,7 +59,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         /// <summary>
         /// Creates an instance of <see cref="WebAssemblyHostBuilder"/> with the minimal configuration.
         /// </summary>
-        internal WebAssemblyHostBuilder(IJSUnmarshalledRuntime jsRuntime)
+        internal WebAssemblyHostBuilder(DefaultWebAssemblyJSRuntime jsRuntime)
         {
             // Private right now because we don't have much reason to expose it. This can be exposed
             // in the future if we want to give people a choice between CreateDefault and something
@@ -68,7 +68,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             RootComponents = new RootComponentMappingCollection();
             Services = new ServiceCollection();
             Logging = new LoggingBuilder(Services);
-            _dynamicRootComponentConfiguration = new DefaultDynamicRootComponentConfiguration();
+            _dynamicRootComponentConfiguration = new DefaultDynamicRootComponentConfiguration(
+                jsRuntime.ReadJsonSerializerOptions());
 
             // Retrieve required attributes from JSRuntimeInvoker
             InitializeNavigationManager(jsRuntime);

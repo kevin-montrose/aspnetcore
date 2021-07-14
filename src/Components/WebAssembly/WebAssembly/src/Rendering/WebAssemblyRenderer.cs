@@ -136,6 +136,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Rendering
             var interop = new DynamicRootComponentInterop(
                 configuration,
                 DefaultWebAssemblyJSRuntime.Instance,
+                GetRootComponentType,
                 AddRootComponent,
                 RenderRootComponentAsync,
                 RemoveRootComponent);

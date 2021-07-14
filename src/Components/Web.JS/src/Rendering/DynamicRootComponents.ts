@@ -1,6 +1,7 @@
 import { DotNet } from '@microsoft/dotnet-js-interop';
 
 const blazorDynamicRootComponentAttributeName = 'bl-dynamic-root';
+const textEncoder = new TextEncoder();
 
 let manager: DotNet.DotNetObject | undefined;
 let nextDynamicRootComponentSelector = 0;
@@ -35,7 +36,10 @@ class DynamicRootComponent {
     setParameters(parameters: object | null | undefined) {
         parameters = parameters || {};
         const parameterCount = Object.keys(parameters).length;
-        return getRequiredManager().invokeMethodAsync('RenderRootComponentAsync', this._componentId, parameterCount, parameters);
+        const parametersJson = JSON.stringify(parameters);
+        const parametersUtf8 = textEncoder.encode(parametersJson);
+
+        return getRequiredManager().invokeMethodAsync('RenderRootComponentAsync', this._componentId, parameterCount, parametersUtf8);
     }
 
     async dispose() {

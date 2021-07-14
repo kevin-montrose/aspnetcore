@@ -45,6 +45,7 @@ Microsoft.AspNetCore.Components.ParameterViewBuilder.Add(string! name, object? v
 Microsoft.AspNetCore.Components.ParameterViewBuilder.ParameterViewBuilder(int count) -> void
 Microsoft.AspNetCore.Components.ParameterViewBuilder.ToParameterView() -> Microsoft.AspNetCore.Components.ParameterView
 Microsoft.AspNetCore.Components.RenderHandle.IsRenderingOnMetadataUpdate.get -> bool
+Microsoft.AspNetCore.Components.RenderTree.Renderer.GetRootComponentType(int componentId) -> System.Type!
 Microsoft.AspNetCore.Components.RenderTree.Renderer.RemoveRootComponent(int componentId) -> void
 Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder.Dispose() -> void
 Microsoft.AspNetCore.Components.Routing.Router.PreferExactMatches.get -> bool
