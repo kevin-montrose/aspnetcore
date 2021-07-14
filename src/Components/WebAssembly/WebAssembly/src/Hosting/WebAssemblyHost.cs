@@ -138,11 +138,6 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
             await manager.RestoreStateAsync(store);
 
-            if (MetadataUpdater.IsSupported)
-            {
-                await WebAssemblyHotReload.InitializeAsync();
-            }
-
             var tcs = new TaskCompletionSource();
 
             using (cancellationToken.Register(() => tcs.TrySetResult()))
@@ -171,6 +166,12 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                         initializationTcs.SetException(ex);
                     }
                 });
+
+                // Moving this code as a (possibly temporary?) workaround for https://github.com/dotnet/aspnetcore/issues/34332
+                if (MetadataUpdater.IsSupported)
+                {
+                    await WebAssemblyHotReload.InitializeAsync();
+                }
 
                 await initializationTcs.Task;
                 store.ExistingState.Clear();
