@@ -25,7 +25,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         private readonly IConfiguration _configuration;
         private readonly RootComponentMappingCollection _rootComponents;
         private readonly string? _persistedState;
-        private readonly DynamicRootComponentConfiguration _dynamicRootComponents;
+        private readonly DefaultDynamicRootComponentConfiguration _dynamicRootComponents;
 
         // NOTE: the host is disposable because it OWNs references to disposable things.
         //
@@ -54,7 +54,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             _configuration = builder.Configuration;
             _rootComponents = builder.RootComponents;
             _persistedState = persistedState;
-            _dynamicRootComponents = builder.DynamicRootComponents;
+            _dynamicRootComponents = (DefaultDynamicRootComponentConfiguration)builder.DynamicRootComponents;
         }
 
         /// <summary>

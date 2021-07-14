@@ -3,9 +3,10 @@
 
 using System.ComponentModel;
 using System.Text.Json;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
-namespace Microsoft.AspNetCore.Components.Web
+namespace Microsoft.AspNetCore.Components.Infrastructure
 {
     // This type is a way of exposing some of the renderer methods to JS interop without
     // otherwise changing the public API surface.
@@ -23,18 +24,10 @@ namespace Microsoft.AspNetCore.Components.Web
         private readonly Func<Type, string, int> _addRootComponent;
         private readonly Func<int, ParameterView, Task> _renderRootComponentAsync;
         private readonly Action<int> _removeRootComponent;
-        private readonly Dictionary<string, Type> _allowedComponentTypes = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, Type> _allowedComponentTypes;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="configurationBuilder"></param>
-        /// <param name="jsRuntime"></param>
-        /// <param name="addRootComponent"></param>
-        /// <param name="renderRootComponentAsync"></param>
-        /// <param name="removeRootComponent"></param>
-        public DynamicRootComponentInterop(
-            DynamicRootComponentConfiguration configurationBuilder,
+        internal DynamicRootComponentInterop(
+            DefaultDynamicRootComponentConfiguration configurationBuilder,
             IJSRuntime jsRuntime,
             Func<Type, string, int> addRootComponent,
             Func<int, ParameterView, Task> renderRootComponentAsync,
@@ -46,17 +39,11 @@ namespace Microsoft.AspNetCore.Components.Web
             _removeRootComponent = removeRootComponent;
             _renderRootComponentAsync = renderRootComponentAsync;
 
-            foreach (var entry in configurationBuilder.AllowedComponents)
-            {
-                _allowedComponentTypes.Add(entry.Identifier, entry.ComponentType);
-            }
+            // Snapshot the config to ensure it's not mutated later
+            _allowedComponentTypes = new(configurationBuilder.AllowedComponentsByIdentifier, StringComparer.Ordinal);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async ValueTask InitializeAsync()
+        internal async ValueTask InitializeAsync()
         {
             if (_allowedComponentTypes.Count > 0)
             {

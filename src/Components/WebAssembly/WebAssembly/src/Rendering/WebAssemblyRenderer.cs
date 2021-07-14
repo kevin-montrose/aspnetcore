@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Components.Infrastructure;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -130,7 +131,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Rendering
             }
         }
 
-        public ValueTask InitializeDynamicRootComponentSupportAsync(DynamicRootComponentConfiguration configuration)
+        public ValueTask InitializeDynamicRootComponentSupportAsync(DefaultDynamicRootComponentConfiguration configuration)
         {
             var interop = new DynamicRootComponentInterop(
                 configuration,

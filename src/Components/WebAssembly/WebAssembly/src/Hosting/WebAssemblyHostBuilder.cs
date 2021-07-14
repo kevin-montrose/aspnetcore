@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using Microsoft.AspNetCore.Components.Infrastructure;
 using Microsoft.AspNetCore.Components.Lifetime;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Routing;
@@ -25,6 +26,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
     /// </summary>
     public sealed class WebAssemblyHostBuilder
     {
+        private readonly DefaultDynamicRootComponentConfiguration _dynamicRootComponentConfiguration;
         private Func<IServiceProvider> _createServiceProvider;
         private RootComponentTypeCache? _rootComponentCache;
         private string? _persistedState;
@@ -66,7 +68,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             RootComponents = new RootComponentMappingCollection();
             Services = new ServiceCollection();
             Logging = new LoggingBuilder(Services);
-            DynamicRootComponents = new DynamicRootComponentConfiguration();
+            _dynamicRootComponentConfiguration = new DefaultDynamicRootComponentConfiguration();
 
             // Retrieve required attributes from JSRuntimeInvoker
             InitializeNavigationManager(jsRuntime);
@@ -191,7 +193,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         /// <summary>
         /// Gets an object that holds options for allowing JavaScript to add root components dynamically.
         /// </summary>
-        public DynamicRootComponentConfiguration DynamicRootComponents { get; }
+        public DynamicRootComponentConfiguration DynamicRootComponents => _dynamicRootComponentConfiguration;
 
         /// <summary>
         /// Registers a <see cref="IServiceProviderFactory{TBuilder}" /> instance to be used to create the <see cref="IServiceProvider" />.
