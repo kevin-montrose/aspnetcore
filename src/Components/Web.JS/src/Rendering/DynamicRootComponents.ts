@@ -36,6 +36,9 @@ class DynamicRootComponent {
     setParameters(parameters: object | null | undefined) {
         parameters = parameters || {};
         const parameterCount = Object.keys(parameters).length;
+
+        // TODO: Need to use the JSInterop serializer here so that special objects like JSObjectReference
+        // get serialized properly.
         const parametersJson = JSON.stringify(parameters);
         const parametersUtf8 = textEncoder.encode(parametersJson);
 
